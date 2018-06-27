@@ -6,6 +6,7 @@
 #include <wiring_private.h>
 
 #include "Pad.h"
+#include "DrumInterface.h"
 #include "_config.h"
 
 #define MAX_PADS 16
@@ -30,13 +31,13 @@ private:
 	
 
 #ifdef USING_INTERFACE
-	SoftwareSerial* interface;
+	// SoftwareSerial* interface;
 
 	// Sends data to interface
-	void sendData();
+	// void sendData();
 
 	// Receives interface data
-	void receiveData();
+	// void receiveData();
 #endif
 
 

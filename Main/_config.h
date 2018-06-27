@@ -1,8 +1,5 @@
 #pragma once
 
-// Uncomment if you don't use interface
-#define USING_INTERFACE
-
 // === Notes (Addictive Drums) === // 
 #define HH_CONTROLLER	4
 #define SNARE 			38
@@ -22,6 +19,9 @@
 #define CYMBAL3_CHOKE 	82
 #define RIDE_TIPE 		60
 #define RIDE_BELL 		61
+
+// Uncomment if you don't use interface
+#define USING_INTERFACE
 
 // === Types === //
 #define PIEZO 	144
@@ -50,6 +50,20 @@
 // Software Serial pins
 #define RX_PIN	8
 #define TX_PIN	9
+
+// == Encoder Pins == //
+#define ENC_ENTER	2 		// ENC_ENTER must be a pin of External Interrupt
+#define ENC_A		3		// ENC_A must be a pin of External Interrupt
+#define ENC_B		4
+
+// == Pins LCD == //
+// #define LCD_RW		GND
+#define	LCD_RS		14
+#define	LCD_EN		15
+#define	LCD_D4		16
+#define	LCD_D5		17
+#define	LCD_D6		18
+#define	LCD_D7		19
 
 // EEPROM
 #define USING_EEPROM

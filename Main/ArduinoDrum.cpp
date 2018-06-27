@@ -118,10 +118,11 @@ void ArduinoDrum::begin(unsigned long baudRate, bool changePrescalerADC){
 #endif
 
 #ifdef USING_INTERFACE
-	interface = new SoftwareSerial(RX_PIN, TX_PIN);
-	interface->begin(9600);
+	// interface = new SoftwareSerial(RX_PIN, TX_PIN);
+	// interface->begin(9600);
 
-	sendData();
+	// sendData();
+	Interface.begin();
 #endif
 }
 
@@ -129,7 +130,8 @@ void ArduinoDrum::play(){
 	readPads();
 
 #ifdef USING_INTERFACE
-	receiveData();
+	// receiveData();
+	Interface.runInterface();
 #endif
 }
 
@@ -186,71 +188,71 @@ void ArduinoDrum::loadData(){
 
 
 #ifdef USING_INTERFACE
-void ArduinoDrum::sendData(){
-	for(int i = 0; i < MAX_PADS; i++){
-		if(pad[i] == NULL)	continue;
+// void ArduinoDrum::sendData(){
+// 	for(int i = 0; i < MAX_PADS; i++){
+// 		if(pad[i] == NULL)	continue;
 
-		interface->println(pad[i]->getName());
-		interface->println(pad[i]->getID());
-		interface->println(pad[i]->getNote());
-		interface->println(pad[i]->getThresholdMin());
-		interface->println(pad[i]->getThresholdMax());
-		interface->println(pad[i]->getScanTime());
-		interface->println(pad[i]->getMaskTime());
-		interface->println(pad[i]->getGain());
-	}
-	interface->println("#");
-}
+// 		interface->println(pad[i]->getName());
+// 		interface->println(pad[i]->getID());
+// 		interface->println(pad[i]->getNote());
+// 		interface->println(pad[i]->getThresholdMin());
+// 		interface->println(pad[i]->getThresholdMax());
+// 		interface->println(pad[i]->getScanTime());
+// 		interface->println(pad[i]->getMaskTime());
+// 		interface->println(pad[i]->getGain());
+// 	}
+// 	interface->println("#");
+// }
 
-void ArduinoDrum::receiveData(){
-	while(interface->available()){
+// void ArduinoDrum::receiveData(){
+// 	while(interface->available()){
 
-		unsigned long input = interface->readStringUntil('\n').toInt();
+// 		unsigned long input = interface->readStringUntil('\n').toInt();
 
-		if(input == 0xFFFFFFFF){
-			for(int i = 0; i < MAX_PADS; i++){
-				if(pad[i] == NULL)
-					continue;
+// 		if(input == 0xFFFFFFFF){
+// 			for(int i = 0; i < MAX_PADS; i++){
+// 				if(pad[i] == NULL)
+// 					continue;
 
-				#ifdef USING_EEPROM
-				saveData(pad[i]->getID(), NOTE, pad[i]->getNote());
-				saveData(pad[i]->getID(), THRESHMIN, pad[i]->getThresholdMin());
-				saveData(pad[i]->getID(), THRESHMAX, pad[i]->getThresholdMax());
-				saveData(pad[i]->getID(), SCANTIME, pad[i]->getScanTime());
-				saveData(pad[i]->getID(), MASKTIME, pad[i]->getMaskTime());
-				saveData(pad[i]->getID(), GAIN, pad[i]->getGain());
-				#endif
-			}
+// 				#ifdef USING_EEPROM
+// 				saveData(pad[i]->getID(), NOTE, pad[i]->getNote());
+// 				saveData(pad[i]->getID(), THRESHMIN, pad[i]->getThresholdMin());
+// 				saveData(pad[i]->getID(), THRESHMAX, pad[i]->getThresholdMax());
+// 				saveData(pad[i]->getID(), SCANTIME, pad[i]->getScanTime());
+// 				saveData(pad[i]->getID(), MASKTIME, pad[i]->getMaskTime());
+// 				saveData(pad[i]->getID(), GAIN, pad[i]->getGain());
+// 				#endif
+// 			}
 
-			continue;
-		}
+// 			continue;
+// 		}
 
-		int id = input & 0xF;
-		int property = (input >> 4) & 0xF;
-		int value = (input >> 8) & 0xFFF;
+// 		int id = input & 0xF;
+// 		int property = (input >> 4) & 0xF;
+// 		int value = (input >> 8) & 0xFFF;
 
-		switch (property){
-			case NOTE:
-				pad[id]->setNote(value);
-				break;
-			case THRESHMIN:
-				pad[id]->setThresholdMin(value);
-				break;
-			case THRESHMAX:
-				pad[id]->setThresholdMax(value);
-				break;
-			case SCANTIME:
-				pad[id]->setScanTime(value);
-				break;
-			case MASKTIME:
-				pad[id]->setMaskTime(value);
-				break;
-			case GAIN:
-				pad[id]->setGain(value);
-				break;
-		}
-	}
-}
+// 		switch (property){
+// 			case NOTE:
+// 				pad[id]->setNote(value);
+// 				break;
+// 			case THRESHMIN:
+// 				pad[id]->setThresholdMin(value);
+// 				break;
+// 			case THRESHMAX:
+// 				pad[id]->setThresholdMax(value);
+// 				break;
+// 			case SCANTIME:
+// 				pad[id]->setScanTime(value);
+// 				break;
+// 			case MASKTIME:
+// 				pad[id]->setMaskTime(value);
+// 				break;
+// 			case GAIN:
+// 				pad[id]->setGain(value);
+// 				break;
+// 		}
+// 	}
+// }
 #endif
 
 // === Preinstantiate Object === //
