@@ -124,6 +124,7 @@ void ArduinoDrum::begin(unsigned long baudRate, bool changePrescalerADC){
 	// sendData();
 	Interface.begin();
 #endif
+
 }
 
 void ArduinoDrum::play(){
@@ -131,6 +132,7 @@ void ArduinoDrum::play(){
 
 #ifdef USING_INTERFACE
 	// receiveData();
+	
 	Interface.runInterface();
 #endif
 }
@@ -145,8 +147,21 @@ void ArduinoDrum::readPads(){
 
 #ifdef USING_EEPROM
 void ArduinoDrum::saveData(int id, int property, int value){
-
 	EEPROM.put(sizeof(long) * (property + TOTAL_PROPERTYS * id), value);
+}
+
+void ArduinoDrum::saveAllData(){
+	for(int i = 0; i < MAX_PADS; i++){
+		if(pad[i] == NULL)
+			continue;
+
+			saveData(pad[i]->getID(), NOTE, pad[i]->getNote());
+			saveData(pad[i]->getID(), THRESHMIN, pad[i]->getThresholdMin());
+			saveData(pad[i]->getID(), THRESHMAX, pad[i]->getThresholdMax());
+			saveData(pad[i]->getID(), SCANTIME, pad[i]->getScanTime());
+			saveData(pad[i]->getID(), MASKTIME, pad[i]->getMaskTime());
+			saveData(pad[i]->getID(), GAIN, pad[i]->getGain());
+	}
 }
 
 void ArduinoDrum::loadData(){

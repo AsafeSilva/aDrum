@@ -31,12 +31,12 @@ Encoder::Encoder(int _channelA, int _channelB){
 	toLimit = false;
 }
 
-void Encoder::begin(){
+void Encoder::begin(uint8_t inputMode, uint8_t edgeMode){
 
-	pinMode(channelA, INPUT_PULLUP);
-	pinMode(channelB, INPUT_PULLUP);
+	pinMode(channelA, inputMode);
+	pinMode(channelB, inputMode);
 
-	attachInterrupt(digitalPinToInterrupt(channelA), Encoder::interrupt, FALLING);
+	attachInterrupt(digitalPinToInterrupt(channelA), Encoder::interrupt, edgeMode);
 
 	position = 0;
 }

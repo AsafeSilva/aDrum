@@ -24,10 +24,10 @@ private:
 
 	Encoder* encoder;
 	LiquidCrystal* display;
-	static SoftwareSerial* interface;
+	// static SoftwareSerial* interface;
 	static Pad* pad;
 
-	void loadData();
+	// void loadData();
 
 	char s_padName[16], s_padProperty[10], s_padValue[5];
 
@@ -46,7 +46,10 @@ private:
 	const char* propertys[TOTAL_PROPERTYS] = {"Note", "ThreshMn", "ThreshMx",
 												"ScanTime", "MaskTime", "Gain"};
 
-	static bool savingData;
+	static volatile bool savingData;
+
+
+	static volatile unsigned long timeWithoutChanges;
 	
 public:
 

@@ -5,10 +5,11 @@ volatile int DrumInterface::indexPadName;
 volatile int DrumInterface::indexPadProperty;
 volatile int DrumInterface::indexPadValue;
 
-bool DrumInterface::savingData = false;
+volatile bool DrumInterface::savingData;
+volatile unsigned long DrumInterface::timeWithoutChanges;
 
 Pad* DrumInterface::pad;
-SoftwareSerial* DrumInterface::interface;
+// SoftwareSerial* DrumInterface::interface;
 
 DrumInterface::DrumInterface(){}
 
@@ -16,16 +17,16 @@ void DrumInterface::begin(){
 
 	encoder = new Encoder(ENC_A, ENC_B);
 	display = new LiquidCrystal(LCD_RS, LCD_EN, LCD_D4, LCD_D5, LCD_D6, LCD_D7);
-	interface = new SoftwareSerial(RX_PIN, TX_PIN);
+	// interface = new SoftwareSerial(RX_PIN, TX_PIN);
 
 	// Initialize the Encoder
-	encoder->begin();
+	encoder->begin(INPUT, RISING);
 	encoder->whenClick(ENC_ENTER, this->encoderClick);
 	encoder->whenRotate(this->encoderRotate);
 
 	// Initialize serial communication
-	interface->begin(9600);
-	loadData();
+	// interface->begin(9600);
+	// loadData();
 
 	// Initialize the LCD
 	display->begin(16, 2);
@@ -39,6 +40,8 @@ void DrumInterface::begin(){
 	indexPadName = 0;
 	indexPadProperty = 0;
 	indexPadValue = 0;
+
+	savingData = false;
 }
 
 void DrumInterface::runInterface(){
@@ -55,9 +58,12 @@ void DrumInterface::runInterface(){
 		    	display->setCursor(1, 0);
 				display->print("SAVING...     ");
 
-		    	interface->println((unsigned long)0xFFFFFFFF);
+		    	// interface->println((unsigned long)0xFFFFFFFF);
 
-		    	delay(3000);
+			#ifdef USING_EEPROM
+				Drum.saveAllData();
+			#endif
+
 		    	indexPadName = 0;
 		    	savingData = false;
 		    }
@@ -109,7 +115,8 @@ void DrumInterface::runInterface(){
 
 	}
 
-	print();
+	if(millis() - timeWithoutChanges < 500)
+		print();
 
 }
 
@@ -124,6 +131,8 @@ void DrumInterface::encoderClick(){
 		return;
 	}
 
+	timeWithoutChanges = millis();
+
 	indexMenu++;
 	if (indexMenu >= TOTAL_OPTIONS)	indexMenu = 0;
 }
@@ -132,6 +141,8 @@ void DrumInterface::encoderRotate(boolean direction, long position){
 
 	if(savingData)
 		return;
+
+	timeWithoutChanges = millis();
 
 	switch (indexMenu) {
 	    case MENU_NAME:
@@ -152,53 +163,53 @@ void DrumInterface::encoderRotate(boolean direction, long position){
 
 			indexPadValue = direction ? indexPadValue+1 : indexPadValue-1;
 
-			unsigned long send;
+			// unsigned long send;
 
 			if(indexPadProperty == NOTE){
 
 				if(indexPadValue > NOTE_MAX) indexPadValue = 0;
 				else if(indexPadValue < 0)	indexPadValue = NOTE_MAX;
 
-				send = ((unsigned long)pad->getID()) | ((unsigned long)NOTE << 4) | ((unsigned long)indexPadValue << 8);
+				// send = ((unsigned long)pad->getID()) | ((unsigned long)NOTE << 4) | ((unsigned long)indexPadValue << 8);
 
 		    }else if(indexPadProperty == THRESHMIN){
 
 		    	if(indexPadValue > ADC_MAX) indexPadValue = 0;
 				else if(indexPadValue < 0)	indexPadValue = ADC_MAX;
 
-				send = ((unsigned long)pad->getID()) | ((unsigned long)THRESHMIN << 4) | ((unsigned long)indexPadValue << 8);
+				// send = ((unsigned long)pad->getID()) | ((unsigned long)THRESHMIN << 4) | ((unsigned long)indexPadValue << 8);
 		    
 		    }else if(indexPadProperty == THRESHMAX){
 
 		    	if(indexPadValue > ADC_MAX) indexPadValue = 0;
 				else if(indexPadValue < 0)	indexPadValue = ADC_MAX;
 
-				send = ((unsigned long)pad->getID()) | ((unsigned long)THRESHMAX << 4) | ((unsigned long)indexPadValue << 8);
+				// send = ((unsigned long)pad->getID()) | ((unsigned long)THRESHMAX << 4) | ((unsigned long)indexPadValue << 8);
 		    
 		    }else if(indexPadProperty == SCANTIME){
 
 		    	if(indexPadValue > SCANTIME_MAX) indexPadValue = 0;
 				else if(indexPadValue < 0)	indexPadValue = SCANTIME_MAX;
 
-				send = ((unsigned long)pad->getID()) | ((unsigned long)SCANTIME << 4) | ((unsigned long)indexPadValue << 8);
+				// send = ((unsigned long)pad->getID()) | ((unsigned long)SCANTIME << 4) | ((unsigned long)indexPadValue << 8);
 		    
 		    }else if(indexPadProperty == MASKTIME){
 
 		    	if(indexPadValue > MASKTIME_MAX) indexPadValue = 0;
 				else if(indexPadValue < 0)	indexPadValue = MASKTIME_MAX; 
 
-				send = ((unsigned long)pad->getID()) | ((unsigned long)MASKTIME << 4) | ((unsigned long)indexPadValue << 8);
+				// send = ((unsigned long)pad->getID()) | ((unsigned long)MASKTIME << 4) | ((unsigned long)indexPadValue << 8);
 			
 			}else if(indexPadProperty == GAIN){
 
 		    	if(indexPadValue > GAIN_MAX) indexPadValue = 0;
 				else if(indexPadValue < 0)	indexPadValue = GAIN_MAX;
 
-				send = ((unsigned long)pad->getID()) | ((unsigned long)GAIN << 4) | ((unsigned long)indexPadValue << 8);
+				// send = ((unsigned long)pad->getID()) | ((unsigned long)GAIN << 4) | ((unsigned long)indexPadValue << 8);
 			
 			}
 
-			interface->println(send);
+			// interface->println(send);
 
 			break;	      
 	    default:;
@@ -218,8 +229,6 @@ void DrumInterface::print(){
 	display->print(s_padProperty);
 	display->setCursor(11, 1);
 	display->print(s_padValue);
-
-	if(indexPadName == -1) return;
 	
 	switch (indexMenu) {
 	    case MENU_NAME:
@@ -241,12 +250,12 @@ void DrumInterface::print(){
 	    	display->setCursor(15, 0);display->print(" ");
 	    	display->setCursor(0, 1);display->print(" ");
 	    	display->setCursor(10, 1);display->print("<");	    	
-	    	display->setCursor(15, 1);display->print(">");	
+	    	display->setCursor(15, 1);display->print(">");
 	      break;
 	}
 }
 
-void DrumInterface::loadData(){
+/*void DrumInterface::loadData(){
 
 	String name;
 
@@ -277,7 +286,7 @@ void DrumInterface::loadData(){
 
 		Drum.addPad(pad);
 	}
-}
+}*/
 
 // === Preinstantiate Object === //
 DrumInterface Interface = DrumInterface();

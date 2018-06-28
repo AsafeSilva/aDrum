@@ -29,7 +29,6 @@ private:
 	
 #endif
 	
-
 #ifdef USING_INTERFACE
 	// SoftwareSerial* interface;
 
@@ -74,6 +73,12 @@ public:
 
 	// Performs pad reading process
 	void readPads();
+
+#ifdef USING_EEPROM
+	// Saves all data in the EEPROM
+	void saveAllData();
+#endif
+
 
 };
 
