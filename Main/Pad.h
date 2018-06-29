@@ -7,7 +7,6 @@ class Pad{
 
 private:
 
-	// String padName;
 	char padName[16];
 	int padID;
 	int padNote;
@@ -30,7 +29,7 @@ private:
 public:
 	
 	// == Constructors == //
-	Pad(const char* name/*String name*/, int note, int pin, int type = PIEZO);
+	Pad(const char* name, int note, int pin, int type = PIEZO);
 
 	// Initialize pin
 	void begin();
@@ -41,8 +40,6 @@ public:
 	// === Getters and Setters === //
 	void setName(const char* newName);
 	char* getName();
-	// void setName(String newName);
-	// String getName();
 
 	void setID(int newID);	// Do not use this method without knowing what you are doing
 	int getID();

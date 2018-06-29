@@ -2,7 +2,6 @@
 
 
 Pad::Pad(const char* name, int note, int pin, int type){
-// Pad::Pad(String name, int note, int pin, int type){
 	setName(name);
 	setNote(note);
 	setPin(pin);
@@ -90,17 +89,12 @@ void Pad::play(){
     	readPeak = 0;
     	previousTime = currentTime;
 	}
-
-
-
 }
 
 // === Getters and Setters === //
 
 void Pad::setName(const char* newName){	strcpy(padName, newName);	}
 char* Pad::getName(){	return padName;	}
-// void Pad::setName(String newName){	padName = newName;	}
-// String Pad::getName(){	return padName;	}
 
 void Pad::setID(int newID){	padID = newID;	}
 int Pad::getID(){	return padID;	}
