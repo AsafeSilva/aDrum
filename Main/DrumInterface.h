@@ -7,7 +7,7 @@
 #include "Encoder.h"
 #include "_config.h"
 
-#include "ArduinoDrum.h"
+#include "aDrum.h"
 
 
 #define TOTAL_OPTIONS 	3

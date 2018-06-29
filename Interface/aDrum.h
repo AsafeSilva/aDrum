@@ -12,7 +12,7 @@
 
 #define FAST_ADC true
 
-class ArduinoDrum{
+class aDrum{
 
 private:
 	
@@ -43,7 +43,7 @@ private:
 public:
 
 	// Constructor
-	ArduinoDrum();
+	aDrum();
 
 	// Adds a Pad in the first available slot
 	// Returns if a Pad could be added or not, though reading is optional
@@ -76,4 +76,4 @@ public:
 
 };
 
-extern ArduinoDrum Drum;
+extern aDrum Drum;

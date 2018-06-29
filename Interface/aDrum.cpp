@@ -1,14 +1,14 @@
-#include "ArduinoDrum.h"
+#include "aDrum.h"
 
 
-ArduinoDrum::ArduinoDrum(){
+aDrum::aDrum(){
 	cachedSize = 0;
 
 	clear();
 }
 
 
-bool ArduinoDrum::addPad(Pad* newPad){
+bool aDrum::addPad(Pad* newPad){
 	// Check if the Pad already exists on the array
 	for(int i = 0; i < MAX_PADS; i++){
 		if(pad[i] != NULL && pad[i]->getPin() == newPad->getPin())
@@ -30,7 +30,7 @@ bool ArduinoDrum::addPad(Pad* newPad){
 	return false;
 }
 
-void ArduinoDrum::remove(int id){
+void aDrum::remove(int id){
 	// Find a Pad with ID, and removes
 	for(int i = 0; i < MAX_PADS; i++){
 		if(pad[i]->getID() == id){
@@ -41,22 +41,22 @@ void ArduinoDrum::remove(int id){
 	}
 }
 
-void ArduinoDrum::remove(Pad* pad){
+void aDrum::remove(Pad* pad){
 	remove(pad->getID());
 }
 
-void ArduinoDrum::clear(){
+void aDrum::clear(){
 	for(int i = 0; i < MAX_PADS; i++)
 		pad[i] = NULL;
 
 	cachedSize = 0;
 }
 
-int ArduinoDrum::size(){
+int aDrum::size(){
 	return cachedSize;
 }
 
-Pad* ArduinoDrum::get(int id){
+Pad* aDrum::get(int id){
 
 	if(id >= MAX_PADS) return NULL;
 
@@ -73,7 +73,7 @@ Pad* ArduinoDrum::get(int id){
 	return NULL;
 }
 
-void ArduinoDrum::begin(unsigned long baudRate, bool changePrescalerADC){
+void aDrum::begin(unsigned long baudRate, bool changePrescalerADC){
 
 #ifdef USING_MUX
 	MUX_DDR |= MUX_MASK;
@@ -125,7 +125,7 @@ void ArduinoDrum::begin(unsigned long baudRate, bool changePrescalerADC){
 #endif
 }
 
-void ArduinoDrum::play(){
+void aDrum::play(){
 	readPads();
 
 #ifdef USING_INTERFACE
@@ -133,7 +133,7 @@ void ArduinoDrum::play(){
 #endif
 }
 
-void ArduinoDrum::readPads(){
+void aDrum::readPads(){
 	for(int i = 0; i < MAX_PADS; i++){
 		if(pad[i] == NULL)	continue;
 		
@@ -142,12 +142,12 @@ void ArduinoDrum::readPads(){
 }
 
 #ifdef USING_EEPROM
-void ArduinoDrum::saveData(int id, int property, int value){
+void aDrum::saveData(int id, int property, int value){
 
 	EEPROM.put(sizeof(long) * (property + TOTAL_PROPERTYS * id), value);
 }
 
-void ArduinoDrum::loadData(){
+void aDrum::loadData(){
 	int value;
 
 	for (int id = 0; id < MAX_PADS; id++){
@@ -186,7 +186,7 @@ void ArduinoDrum::loadData(){
 
 
 #ifdef USING_INTERFACE
-void ArduinoDrum::sendData(){
+void aDrum::sendData(){
 	for(int i = 0; i < MAX_PADS; i++){
 		if(pad[i] == NULL)	continue;
 
@@ -202,7 +202,7 @@ void ArduinoDrum::sendData(){
 	interface->println("#");
 }
 
-void ArduinoDrum::receiveData(){
+void aDrum::receiveData(){
 	while(interface->available()){
 
 		unsigned long input = interface->readStringUntil('\n').toInt();
@@ -254,4 +254,4 @@ void ArduinoDrum::receiveData(){
 #endif
 
 // === Preinstantiate Object === //
-ArduinoDrum Drum = ArduinoDrum();
+aDrum Drum = aDrum();

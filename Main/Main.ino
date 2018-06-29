@@ -1,4 +1,4 @@
-#include "ArduinoDrum.h"
+#include "aDrum.h"
 
 Pad snare("SNARE", SNARE, A0);
 Pad hiTom("HI-TOM", TOM1, A1);
