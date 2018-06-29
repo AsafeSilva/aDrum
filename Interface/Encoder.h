@@ -35,7 +35,7 @@ public:
 
 	Encoder(int _channelA, int _channelB);
 
-	void begin();
+	void begin(uint8_t inputMode = INPUT, uint8_t edgeMode = FALLING);
 
 	void setLimits(int min, int max, boolean _loopMode = false);
 
