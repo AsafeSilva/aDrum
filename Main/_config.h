@@ -52,18 +52,21 @@
 // #define TX_PIN	9
 
 // --- Encoder Pins
-#define ENC_ENTER	18//2 		// ENC_ENTER must be a pin of External Interrupt
-#define ENC_A		19//3		// ENC_A must be a pin of External Interrupt
-#define ENC_B		20//4
+#define ENC_A		20		// ENC_A must be a pin of External Interrupt
+#define ENC_B		21
+
+// --- Buttons Pins
+#define BTN_ENTER	19		// BTN_ENTER must be a pin of External Interrupt
+#define BTN_BACK	18		// BTN_BACK must be a pin of External Interrupt
 
 // --- Pins LCD
 // #define LCD_RW		GND
-#define	LCD_RS		2//14
-#define	LCD_EN		3//15
-#define	LCD_D4		4//16
-#define	LCD_D5		5//17
-#define	LCD_D6		6//18
-#define	LCD_D7		7//19
+#define	LCD_RS		4
+#define	LCD_EN		5
+#define	LCD_D4		6
+#define	LCD_D5		7
+#define	LCD_D6		8
+#define	LCD_D7		9
 
 // --- EEPROM
 #define USING_EEPROM

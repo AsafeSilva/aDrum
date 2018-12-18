@@ -5,6 +5,7 @@
 #include <SoftwareSerial.h>
 
 #include "Encoder.h"
+#include "ButtonEvent.h"
 #include "_config.h"
 
 #include "aDrum.h"
@@ -23,6 +24,8 @@ class DrumInterface{
 private:
 
 	Encoder* encoder;
+	ButtonEvent* btnEnter;
+	ButtonEvent* btnBack;
 	LiquidCrystal* display;
 	// static SoftwareSerial* interface;
 	static Pad* pad;
@@ -34,7 +37,11 @@ private:
 	static volatile int indexMenu; 
 	static volatile int indexPadName, indexPadProperty, indexPadValue;
 
-	static void encoderClick();
+	static void buttonEnter();
+	static void buttonBack();
+	static volatile unsigned long lastTimeDebounceEnter;
+	static volatile unsigned long lastTimeDebounceBack;
+
 	static void encoderRotate(boolean direction, long position);
 
 	void print();

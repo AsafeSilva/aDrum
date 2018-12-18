@@ -29,6 +29,7 @@ void setup() {
 
 	Drum.addPad(&hihat);
 	Drum.addPad(&hhc);
+	
 	Drum.addPad(&snareEdge);
 	Drum.addPad(&midTom);
 	Drum.addPad(&crash1Choke);

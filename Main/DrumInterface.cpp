@@ -8,6 +8,9 @@ volatile int DrumInterface::indexPadValue;
 volatile bool DrumInterface::savingData;
 volatile unsigned long DrumInterface::timeWithoutChanges;
 
+volatile unsigned long DrumInterface::lastTimeDebounceEnter;
+volatile unsigned long DrumInterface::lastTimeDebounceBack;
+
 Pad* DrumInterface::pad;
 // SoftwareSerial* DrumInterface::interface;
 
@@ -16,13 +19,20 @@ DrumInterface::DrumInterface(){}
 void DrumInterface::begin(){
 
 	encoder = new Encoder(ENC_A, ENC_B);
+	btnEnter = new ButtonEvent(BTN_ENTER);
+	btnBack = new ButtonEvent(BTN_BACK);
 	display = new LiquidCrystal(LCD_RS, LCD_EN, LCD_D4, LCD_D5, LCD_D6, LCD_D7);
 	// interface = new SoftwareSerial(RX_PIN, TX_PIN);
 
 	// Initialize the Encoder
 	encoder->begin(INPUT, RISING);
-	encoder->whenClick(ENC_ENTER, this->encoderClick);
 	encoder->whenRotate(this->encoderRotate);
+
+	// Initialize buttons
+	btnEnter->begin(INPUT_PULLUP, FALLING);
+	btnEnter->whenClick(this->buttonEnter);
+	btnBack->begin(INPUT_PULLUP, FALLING);
+	btnBack->whenClick(this->buttonBack);
 
 	// Initialize serial communication
 	// interface->begin(9600);
@@ -66,6 +76,7 @@ void DrumInterface::runInterface(){
 
 		    	indexPadName = 0;
 		    	savingData = false;
+		    	timeWithoutChanges = millis();
 		    }
 
 		}else{
@@ -120,21 +131,46 @@ void DrumInterface::runInterface(){
 
 }
 
-void DrumInterface::encoderClick(){
-	delay(200);
+void DrumInterface::buttonEnter(){
+	timeWithoutChanges = millis();
 
+	if(millis() - lastTimeDebounceEnter >= 200){
+
+		if(savingData)
+			return;
+
+		if(indexPadName == -1){
+			savingData = true;
+			return;
+		}
+
+		indexMenu++;
+		if (indexMenu >= TOTAL_OPTIONS)	indexMenu = 0;
+
+
+		lastTimeDebounceEnter = millis();
+	}
+}
+
+void DrumInterface::buttonBack(){
 	if(savingData)
 		return;
 
-	if(indexPadName == -1){
-		savingData = true;
+	if(indexPadName == -1)
 		return;
-	}
 
 	timeWithoutChanges = millis();
 
-	indexMenu++;
-	if (indexMenu >= TOTAL_OPTIONS)	indexMenu = 0;
+
+	if(millis() - lastTimeDebounceBack >= 200){
+
+		indexMenu--;
+		if (indexMenu < 0)	indexMenu = TOTAL_OPTIONS;
+		
+
+		lastTimeDebounceBack = millis();
+	}
+
 }
 
 void DrumInterface::encoderRotate(boolean direction, long position){
