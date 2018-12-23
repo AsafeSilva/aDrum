@@ -1,5 +1,8 @@
 #pragma once
 
+#define PROJECT_NAME	"aDrum Module"
+#define PROJECT_VERSION	"v1.0"
+
 // --- Notes (Addictive Drums)
 #define HH_CONTROLLER	4
 #define SNARE 			38
@@ -52,12 +55,13 @@
 // #define TX_PIN	9
 
 // --- Encoder Pins
-#define ENC_A		20		// ENC_A must be a pin of External Interrupt
+#define ENC_A		20		// ENC_A must be external interrupt pin
 #define ENC_B		21
 
-// --- Buttons Pins
-#define BTN_ENTER	19		// BTN_ENTER must be a pin of External Interrupt
-#define BTN_BACK	18		// BTN_BACK must be a pin of External Interrupt
+// --- Buttons Pins (must be external interrupt pins)
+#define BTN_ENTER	19
+#define BTN_BACK	18
+#define BTN_STORE	2
 
 // --- Pins LCD
 // #define LCD_RW		GND

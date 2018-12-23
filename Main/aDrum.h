@@ -82,4 +82,4 @@ public:
 
 };
 
-extern aDrum Drum;
+extern aDrum DrumKit;

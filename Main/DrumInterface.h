@@ -26,6 +26,8 @@ private:
 	Encoder* encoder;
 	ButtonEvent* btnEnter;
 	ButtonEvent* btnBack;
+	ButtonEvent* btnStore;
+
 	LiquidCrystal* display;
 	// static SoftwareSerial* interface;
 	static Pad* pad;
@@ -37,14 +39,18 @@ private:
 	static volatile int indexMenu; 
 	static volatile int indexPadName, indexPadProperty, indexPadValue;
 
-	static void buttonEnter();
-	static void buttonBack();
-	static volatile unsigned long lastTimeDebounceEnter;
-	static volatile unsigned long lastTimeDebounceBack;
+	static void buttonEnterEvent();
+	static void buttonBackEvent();
+	static void buttonStoreEvent();
+	static volatile unsigned long debounceEnterButton;
+	static volatile unsigned long debounceBackButton;
+	static volatile unsigned long debounceStoreButton;
 
-	static void encoderRotate(boolean direction, long position);
+	static void encoderRotateEvent(boolean direction, long position);
 
 	void print();
+
+	void splashScreen();
 
 	const char* spaces[11] = {"", " ", "  ", "   ", "    ", "     ", "      ",
 							"       ", "        ", "         ", "          "};
@@ -54,6 +60,7 @@ private:
 												"ScanTime", "MaskTime", "Gain"};
 
 	static volatile bool savingData;
+	static volatile bool saveMenu;
 
 
 	static volatile unsigned long timeWithoutChanges;

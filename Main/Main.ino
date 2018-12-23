@@ -19,26 +19,26 @@ Pad rideBell("RIDE-BELL", RIDE_BELL, A13, OFF);
 
 void setup() {
 
-	Drum.addPad(&snare);
-	Drum.addPad(&hiTom);
-	Drum.addPad(&lowTom);
-	Drum.addPad(&kick);
-	Drum.addPad(&crash1);
-	Drum.addPad(&crash2);
-	Drum.addPad(&ride);
+	DrumKit.addPad(&snare);
+	DrumKit.addPad(&hiTom);
+	DrumKit.addPad(&lowTom);
+	DrumKit.addPad(&kick);
+	DrumKit.addPad(&crash1);
+	DrumKit.addPad(&crash2);
+	DrumKit.addPad(&ride);
 
-	Drum.addPad(&hihat);
-	Drum.addPad(&hhc);
+	DrumKit.addPad(&hihat);
+	DrumKit.addPad(&hhc);
 	
-	Drum.addPad(&snareEdge);
-	Drum.addPad(&midTom);
-	Drum.addPad(&crash1Choke);
-	Drum.addPad(&crash2Choke);
-	Drum.addPad(&rideBell);
+	DrumKit.addPad(&snareEdge);
+	DrumKit.addPad(&midTom);
+	DrumKit.addPad(&crash1Choke);
+	DrumKit.addPad(&crash2Choke);
+	DrumKit.addPad(&rideBell);
 
-	Drum.begin(115200, FAST_ADC);	// abaixo dos 'addPad()'
+	DrumKit.begin(115200, FAST_ADC);	// abaixo dos 'addPad()'
 }
 
 void loop() {
-	Drum.play();
+	DrumKit.play();
 }

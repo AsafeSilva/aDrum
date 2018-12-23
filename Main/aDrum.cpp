@@ -271,4 +271,4 @@ void aDrum::loadData(){
 #endif
 
 // === Preinstantiate Object === //
-aDrum Drum = aDrum();
+aDrum DrumKit = aDrum();
