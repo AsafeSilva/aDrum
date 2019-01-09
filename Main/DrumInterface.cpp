@@ -5,14 +5,17 @@ volatile int DrumInterface::indexPadName;
 volatile int DrumInterface::indexPadProperty;
 volatile int DrumInterface::indexPadValue;
 
-volatile bool DrumInterface::savingData;
-volatile bool DrumInterface::saveMenu;
+volatile bool DrumInterface::storingData;
+volatile bool DrumInterface::storeMenu;
+
+volatile bool DrumInterface::standby;
 
 volatile unsigned long DrumInterface::timeWithoutChanges;
 
 volatile unsigned long DrumInterface::debounceEnterButton;
 volatile unsigned long DrumInterface::debounceBackButton;
 volatile unsigned long DrumInterface::debounceStoreButton;
+volatile unsigned long DrumInterface::debounceStandbyButton;
 
 Pad* DrumInterface::pad;
 // SoftwareSerial* DrumInterface::interface;
@@ -27,6 +30,10 @@ void DrumInterface::begin(){
 	display->begin(16, 2);
 	display->clear();
 
+	pinMode(LED_STATUS, OUTPUT);
+	pinMode(LED_SENDING_DATA, OUTPUT);
+	pinMode(LCD_LED, OUTPUT);
+
 	splashScreen();
 
 	encoder = new Encoder(ENC_A, ENC_B);
@@ -34,6 +41,7 @@ void DrumInterface::begin(){
 	btnEnter = new ButtonEvent(BTN_ENTER);
 	btnBack = new ButtonEvent(BTN_BACK);
 	btnStore = new ButtonEvent(BTN_STORE);
+	btnStandby = new ButtonEvent(BTN_STANDBY);
 
 	// interface = new SoftwareSerial(RX_PIN, TX_PIN);
 
@@ -48,6 +56,9 @@ void DrumInterface::begin(){
 	btnBack->whenClick(this->buttonBackEvent);
 	btnStore->begin(INPUT_PULLUP, FALLING);
 	btnStore->whenClick(this->buttonStoreEvent);
+	btnStandby->begin(INPUT_PULLUP, FALLING);
+	btnStandby->whenClick(this->buttonStandbyEvent);
+
 
 	// Initialize serial communication
 	// interface->begin(9600);
@@ -63,20 +74,33 @@ void DrumInterface::begin(){
 	indexPadProperty = 0;
 	indexPadValue = 0;
 
-	savingData = false;
-	saveMenu = false;
+	storingData = false;
+	storeMenu = false;
+
+	standby = false;
 
 	timeWithoutChanges = millis();
 }
 
 void DrumInterface::runInterface(){
 
-	if(saveMenu){
+	if(standby){
+		TurnOff(LCD_LED);
+		TurnOff(LED_STATUS);
+		display->noDisplay();
+		while(standby);
+	}
+
+	TurnOn(LCD_LED);
+	display->display();
+
+
+	if(storeMenu){
 		strcpy(s_padName, "  SAVE DATA?  ");
 		strcpy(s_padProperty, "");
 		strcpy(s_padValue, "");
 
-		if(savingData){
+		if(storingData){
 	    	display->setCursor(1, 0);
 			display->print(F("  SAVING      "));
 
@@ -91,8 +115,8 @@ void DrumInterface::runInterface(){
 			}
 		#endif
 
-	    	saveMenu = false;
-	    	savingData = false;
+	    	storeMenu = false;
+	    	storingData = false;
 	    	timeWithoutChanges = millis();
 	    }
 
@@ -103,6 +127,7 @@ void DrumInterface::runInterface(){
 		    pad = DrumKit.get(indexPadName);
 
 		    indexPadProperty = NOTE;
+		    indexPadValue = pad->getNote();
 
 		    strcpy(s_padName, pad->getName());
 			strcpy(s_padProperty, propertys[indexPadProperty]);
@@ -147,8 +172,12 @@ void DrumInterface::runInterface(){
 	}
 
 
-	if(millis() - timeWithoutChanges < 500)
+	if(millis() - timeWithoutChanges < 500){
 		print();
+		TurnOff(LED_STATUS);
+	}else{
+		TurnOn(LED_STATUS);
+	}
 }
 
 
@@ -158,11 +187,11 @@ void DrumInterface::buttonEnterEvent(){
 	if(millis() - debounceEnterButton >= DEBOUNCE_200){
 		debounceEnterButton = millis();
 
-		if(savingData)
+		if(storingData || standby)
 			return;
 
-		if(saveMenu){
-			savingData = true;
+		if(storeMenu){
+			storingData = true;
 			return;
 		}
 
@@ -177,16 +206,16 @@ void DrumInterface::buttonBackEvent(){
 	if(millis() - debounceBackButton >= DEBOUNCE_200){
 		debounceBackButton = millis();
 
-		if(savingData)
+		if(storingData || standby)
 			return;
 
-		if(saveMenu){
-			saveMenu = false;
+		if(storeMenu){
+			storeMenu = false;
 			return;
 		}
 
 		indexMenu--;
-		if (indexMenu < 0)	indexMenu = TOTAL_OPTIONS;
+		if (indexMenu < 0)	indexMenu = TOTAL_OPTIONS-1;
 	}
 }
 
@@ -196,8 +225,22 @@ void DrumInterface::buttonStoreEvent(){
 	if(millis() - debounceStoreButton >= DEBOUNCE_200){
 		debounceStoreButton = millis();
 
-		saveMenu = true;
+		if(storingData || standby)
+			return;
+
+		storeMenu = true;
 		indexMenu = MENU_NAME;
+	}
+
+}
+
+void DrumInterface::buttonStandbyEvent(){
+	timeWithoutChanges = millis();
+
+	if(millis() - debounceStandbyButton >= DEBOUNCE_200){
+		debounceStandbyButton = millis();
+
+		standby = !standby;
 	}
 
 }
@@ -205,7 +248,7 @@ void DrumInterface::buttonStoreEvent(){
 void DrumInterface::encoderRotateEvent(boolean direction, long position){
 	timeWithoutChanges = millis();
 
-	if(savingData)
+	if(storingData || standby)
 		return;
 
 
@@ -321,6 +364,9 @@ void DrumInterface::print(){
 }
 
 void DrumInterface::splashScreen(){
+	TurnOn(LCD_LED);
+	display->display();
+
 	display->setCursor(2, 0);
 	display->print(F(PROJECT_NAME));
 	display->setCursor(12, 1);

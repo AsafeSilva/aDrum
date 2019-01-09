@@ -11,11 +11,11 @@ Pad ride("RIDE", RIDE_TIPE, A6);
 Pad hihat("HIHAT", HIHAT_SHAFT, A7);
 Pad hhc("HH-CONTROL", HH_CONTROLLER, A8, HH_C);
 
-Pad snareEdge("SNARE-EDGE", SNARE_SIDESTICK, A9, OFF);
-Pad midTom("MID-TOM", TOM2, A10, OFF);
-Pad crash1Choke("CRASH1-CHOKE", CYMBAL1_CHOKE, A11, OFF);
-Pad crash2Choke("CRASH2-CHOKE", CYMBAL2_CHOKE, A12, OFF);
-Pad rideBell("RIDE-BELL", RIDE_BELL, A13, OFF);
+Pad snareEdge("SNARE-EDGE", SNARE_SIDESTICK, A9);
+Pad midTom("MID-TOM", TOM2, A10);
+Pad crash1Choke("CRASH1-CHOKE", CYMBAL1_CHOKE, A11);
+Pad crash2Choke("CRASH2-CHOKE", CYMBAL2_CHOKE, A12);
+Pad rideBell("RIDE-BELL", RIDE_BELL, A13);
 
 void setup() {
 

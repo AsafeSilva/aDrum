@@ -73,15 +73,25 @@ void Pad::play(){
 
 		}else if(readEnable){
 
+			TurnOn(LED_SENDING_DATA);
+
 			readEnable = false;
+
+			// calculate value between 0 and 1
+			float masterVolume = analogRead(MASTER_VOLUME);
+			masterVolume /= 1023.0;
 
 			readPeak = constrain(readPeak + padGain, padThresholdMin, padThresholdMax);
 			velocity = map(readPeak, padThresholdMin, padThresholdMax, 1, NOTE_MAX);
+			velocity = (int)(velocity * masterVolume);
+
 
 			// Send Midi Note
 			Serial.write(padType | MIDI_CHANNEL);
 			Serial.write(padNote);
 			Serial.write(velocity);
+
+			TurnOff(LED_SENDING_DATA);
 		}
 	} else {
     	readEnable = true;

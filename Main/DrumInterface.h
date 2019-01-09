@@ -27,6 +27,7 @@ private:
 	ButtonEvent* btnEnter;
 	ButtonEvent* btnBack;
 	ButtonEvent* btnStore;
+	ButtonEvent* btnStandby;
 
 	LiquidCrystal* display;
 	// static SoftwareSerial* interface;
@@ -42,9 +43,11 @@ private:
 	static void buttonEnterEvent();
 	static void buttonBackEvent();
 	static void buttonStoreEvent();
+	static void buttonStandbyEvent();
 	static volatile unsigned long debounceEnterButton;
 	static volatile unsigned long debounceBackButton;
 	static volatile unsigned long debounceStoreButton;
+	static volatile unsigned long debounceStandbyButton;
 
 	static void encoderRotateEvent(boolean direction, long position);
 
@@ -59,9 +62,10 @@ private:
 	const char* propertys[TOTAL_PROPERTYS] = {"Note", "ThreshMn", "ThreshMx",
 												"ScanTime", "MaskTime", "Gain"};
 
-	static volatile bool savingData;
-	static volatile bool saveMenu;
+	static volatile bool storingData;
+	static volatile bool storeMenu;
 
+	static volatile bool standby;
 
 	static volatile unsigned long timeWithoutChanges;
 	

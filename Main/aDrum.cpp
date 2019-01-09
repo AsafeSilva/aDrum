@@ -94,6 +94,9 @@ void aDrum::begin(unsigned long baudRate, bool changePrescalerADC){
 		// 113us		prescaler 128
 	}
 
+	// Potenciometer to master volume
+	pinMode(MASTER_VOLUME, INPUT);
+
 	for(int i = 0; i < MAX_PADS; i++){
 		if(pad[i] == NULL)
 			continue;

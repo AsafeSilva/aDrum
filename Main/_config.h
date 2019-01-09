@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Arduino.h>
+
 #define PROJECT_NAME	"aDrum Module"
 #define PROJECT_VERSION	"v1.0"
 
@@ -55,13 +57,20 @@
 // #define TX_PIN	9
 
 // --- Encoder Pins
-#define ENC_A		20		// ENC_A must be external interrupt pin
-#define ENC_B		21
+#define ENC_A		3		// ENC_A must be external interrupt pin
+#define ENC_B		2
 
 // --- Buttons Pins (must be external interrupt pins)
-#define BTN_ENTER	19
 #define BTN_BACK	18
-#define BTN_STORE	2
+#define BTN_ENTER	19
+#define BTN_STORE	20
+#define BTN_STANDBY	21
+
+// --- Leds Pins
+#define LED_STATUS	14
+#define LED_SENDING_DATA	15
+
+#define MASTER_VOLUME	A15
 
 // --- Pins LCD
 // #define LCD_RW		GND
@@ -71,6 +80,7 @@
 #define	LCD_D5		7
 #define	LCD_D6		8
 #define	LCD_D7		9
+#define LCD_LED		16
 
 // --- EEPROM
 #define USING_EEPROM
@@ -93,3 +103,8 @@
 #define MUX6_PIN	106
 #define MUX7_PIN	107
 #endif
+
+// --- MACROS
+#define TurnOn(pin)	digitalWrite(pin, 1)
+#define TurnOff(pin)	digitalWrite(pin, 0)
+#define Toggle(pin)	digitalWrite(pin, !digitalRead(pin))
