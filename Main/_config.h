@@ -84,7 +84,6 @@
 
 // --- EEPROM
 #define USING_EEPROM
-#define SAVE_DATA_PIN	12
 
 // --- MUX
 // #define USING_MUX

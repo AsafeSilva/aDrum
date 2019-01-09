@@ -79,10 +79,6 @@ void aDrum::begin(unsigned long baudRate, bool changePrescalerADC){
 	MUX_DDR |= MUX_MASK;
 #endif
 
-#ifdef USING_EEPROM
-	pinMode(SAVE_DATA_PIN, INPUT_PULLUP);
-#endif
-
 	Serial.begin(baudRate);
 
 	if(changePrescalerADC){
@@ -97,6 +93,10 @@ void aDrum::begin(unsigned long baudRate, bool changePrescalerADC){
 	// Potenciometer to master volume
 	pinMode(MASTER_VOLUME, INPUT);
 
+#ifdef USING_EEPROM
+	pinMode(BTN_STORE, INPUT_PULLUP);
+#endif
+
 	for(int i = 0; i < MAX_PADS; i++){
 		if(pad[i] == NULL)
 			continue;
@@ -104,7 +104,7 @@ void aDrum::begin(unsigned long baudRate, bool changePrescalerADC){
 		pad[i]->begin();
 
 		#ifdef USING_EEPROM
-		if(!digitalRead(SAVE_DATA_PIN)){
+		if(!digitalRead(BTN_STORE)){
 			saveData(pad[i]->getID(), NOTE, pad[i]->getNote());
 			saveData(pad[i]->getID(), THRESHMIN, pad[i]->getThresholdMin());
 			saveData(pad[i]->getID(), THRESHMAX, pad[i]->getThresholdMax());
