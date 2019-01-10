@@ -46,11 +46,15 @@ void Pad::play(){
 	readSensor = analogRead(padPin);
 #endif
 
+	// Maps values ​​from 0 to 127
+	readSensor = (int) (readSensor * 127.0 / 1023.0);
+
+
 	if((padType == OFF) || (readSensor < padThresholdMin))
 		return;
 
 	if(padType == HH_C){
-		velocity = map(readSensor, padThresholdMin, padThresholdMax, 1, NOTE_MAX);
+		velocity = constrain(readSensor, 0, VELOCITY_MAX);
 
 		// Send Midi Note
 		Serial.write(padType | MIDI_CHANNEL);
@@ -81,10 +85,8 @@ void Pad::play(){
 			float masterVolume = analogRead(MASTER_VOLUME);
 			masterVolume /= 1023.0;
 
-			readPeak = constrain(readPeak + padGain, padThresholdMin, padThresholdMax);
-			velocity = map(readPeak, padThresholdMin, padThresholdMax, 1, NOTE_MAX);
+			velocity = constrain(readPeak + padGain, 0, VELOCITY_MAX);
 			velocity = (int)(velocity * masterVolume);
-
 
 			// Send Midi Note
 			Serial.write(padType | MIDI_CHANNEL);
@@ -109,7 +111,7 @@ char* Pad::getName(){	return padName;	}
 void Pad::setID(int newID){	padID = newID;	}
 int Pad::getID(){	return padID;	}
 
-void Pad::setNote(int newNote){	padNote = newNote;	}
+void Pad::setNote(int newNote){	padNote = constrain(newNote, 0, NOTE_MAX);	}
 int Pad::getNote(){	return padNote;	}
 
 void Pad::setType(int newType){	padType = newType;	}
@@ -118,10 +120,10 @@ int Pad::getType(){	return padType;	}
 void Pad::setPin(int newPin){	padPin = newPin;	}
 int Pad::getPin(){	return padPin;	}
 
-void Pad::setThresholdMin(int newThresholdMin){	padThresholdMin = constrain(newThresholdMin, 0, ADC_MAX);	}
+void Pad::setThresholdMin(int newThresholdMin){	padThresholdMin = constrain(newThresholdMin, 0, VELOCITY_MAX);	}
 int Pad::getThresholdMin(){	return padThresholdMin;	}
 
-void Pad::setThresholdMax(int newThresholdMax){	padThresholdMax = constrain(newThresholdMax, 0, ADC_MAX);	}
+void Pad::setThresholdMax(int newThresholdMax){	padThresholdMax = constrain(newThresholdMax, 0, VELOCITY_MAX);	}
 int Pad::getThresholdMax(){	return padThresholdMax;	}
 
 void Pad::setScanTime(int newScanTime){	padScanTime = constrain(newScanTime, 0, SCANTIME_MAX);	}

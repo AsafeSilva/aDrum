@@ -12,7 +12,6 @@
 
 
 #define TOTAL_OPTIONS 	3
-#define TOTAL_PROPERTYS 6
 
 #define MENU_NAME 		0
 #define MENU_PROPERTY 	1
@@ -59,8 +58,7 @@ private:
 							"       ", "        ", "         ", "          "};
 
 	// No máximo 8 caracteres
-	const char* propertys[TOTAL_PROPERTYS] = {"Note", "ThreshMn", "ThreshMx",
-												"ScanTime", "MaskTime", "Gain"};
+	const char* propertys[TOTAL_PROPERTYS] = {"Note", "Threshold", "ScanTime", "MaskTime", "Gain"};
 
 	static volatile bool storingData;
 	static volatile bool storeMenu;

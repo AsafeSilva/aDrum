@@ -107,7 +107,6 @@ void aDrum::begin(unsigned long baudRate, bool changePrescalerADC){
 		if(!digitalRead(BTN_STORE)){
 			saveData(pad[i]->getID(), NOTE, pad[i]->getNote());
 			saveData(pad[i]->getID(), THRESHMIN, pad[i]->getThresholdMin());
-			saveData(pad[i]->getID(), THRESHMAX, pad[i]->getThresholdMax());
 			saveData(pad[i]->getID(), SCANTIME, pad[i]->getScanTime());
 			saveData(pad[i]->getID(), MASKTIME, pad[i]->getMaskTime());
 			saveData(pad[i]->getID(), GAIN, pad[i]->getGain());
@@ -160,7 +159,6 @@ void aDrum::saveAllData(){
 
 			saveData(pad[i]->getID(), NOTE, pad[i]->getNote());
 			saveData(pad[i]->getID(), THRESHMIN, pad[i]->getThresholdMin());
-			saveData(pad[i]->getID(), THRESHMAX, pad[i]->getThresholdMax());
 			saveData(pad[i]->getID(), SCANTIME, pad[i]->getScanTime());
 			saveData(pad[i]->getID(), MASKTIME, pad[i]->getMaskTime());
 			saveData(pad[i]->getID(), GAIN, pad[i]->getGain());
@@ -184,9 +182,6 @@ void aDrum::loadData(){
 					break;
 				case THRESHMIN:
 					pad[id]->setThresholdMin(value);
-					break;
-				case THRESHMAX:
-					pad[id]->setThresholdMax(value);
 					break;
 				case SCANTIME:
 					pad[id]->setScanTime(value);

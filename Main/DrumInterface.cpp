@@ -143,9 +143,6 @@ void DrumInterface::runInterface(){
 		    }else if(indexPadProperty == THRESHMIN){
 		    	sprintf(s_padValue, "%d", pad->getThresholdMin());
 		    	indexPadValue = pad->getThresholdMin();
-		    }else if(indexPadProperty == THRESHMAX){
-		    	sprintf(s_padValue, "%d", pad->getThresholdMax());
-		    	indexPadValue = pad->getThresholdMax();
 		    }else if(indexPadProperty == SCANTIME){
 		    	sprintf(s_padValue, "%d", pad->getScanTime());
 		    	indexPadValue = pad->getScanTime();
@@ -163,7 +160,6 @@ void DrumInterface::runInterface(){
 
 		    if(indexPadProperty == NOTE)			pad->setNote(indexPadValue);
 		    else if(indexPadProperty == THRESHMIN)	pad->setThresholdMin(indexPadValue);
-		    else if(indexPadProperty == THRESHMAX)	pad->setThresholdMax(indexPadValue);
 		    else if(indexPadProperty == SCANTIME)	pad->setScanTime(indexPadValue);
 		    else if(indexPadProperty == MASKTIME)	pad->setMaskTime(indexPadValue);
 		    else if(indexPadProperty == GAIN)		pad->setGain(indexPadValue);
@@ -282,17 +278,10 @@ void DrumInterface::encoderRotateEvent(boolean direction, long position){
 
 		    }else if(indexPadProperty == THRESHMIN){
 
-		    	if(indexPadValue > ADC_MAX) indexPadValue = 0;
-				else if(indexPadValue < 0)	indexPadValue = ADC_MAX;
+		    	if(indexPadValue > VELOCITY_MAX) indexPadValue = 0;
+				else if(indexPadValue < 0)	indexPadValue = VELOCITY_MAX;
 
 				// send = ((unsigned long)pad->getID()) | ((unsigned long)THRESHMIN << 4) | ((unsigned long)indexPadValue << 8);
-		    
-		    }else if(indexPadProperty == THRESHMAX){
-
-		    	if(indexPadValue > ADC_MAX) indexPadValue = 0;
-				else if(indexPadValue < 0)	indexPadValue = ADC_MAX;
-
-				// send = ((unsigned long)pad->getID()) | ((unsigned long)THRESHMAX << 4) | ((unsigned long)indexPadValue << 8);
 		    
 		    }else if(indexPadProperty == SCANTIME){
 
@@ -328,14 +317,14 @@ void DrumInterface::encoderRotateEvent(boolean direction, long position){
 void DrumInterface::print(){
 
 	strcat(s_padName, spaces[14 - strlen(s_padName)]);
-	strcat(s_padProperty, spaces[8 - strlen(s_padProperty)]);
-	strcat(s_padValue, spaces[4 - strlen(s_padValue)]);
+	strcat(s_padProperty, spaces[9 - strlen(s_padProperty)]);
+	strcat(s_padValue, spaces[3 - strlen(s_padValue)]);
 
 	display->setCursor(1, 0);
 	display->print(s_padName);
 	display->setCursor(1, 1);
 	display->print(s_padProperty);
-	display->setCursor(11, 1);
+	display->setCursor(12, 1);
 	display->print(s_padValue);
 	
 	switch (indexMenu) {
@@ -343,21 +332,21 @@ void DrumInterface::print(){
 	    	display->setCursor(0, 0);display->print("<");
 	    	display->setCursor(15, 0);display->print(">");
 	    	display->setCursor(0, 1);display->print(" ");
-	    	display->setCursor(10, 1);display->print(" ");	    	
+	    	display->setCursor(11, 1);display->print(" ");	    	
 	    	display->setCursor(15, 1);display->print(" ");	    	
 	      break;
 	    case MENU_PROPERTY:
 	    	display->setCursor(0, 0);display->print(" ");
 	    	display->setCursor(15, 0);display->print(" ");
 	    	display->setCursor(0, 1);display->print("<");
-	    	display->setCursor(10, 1);display->print(" ");	    	
+	    	display->setCursor(11, 1);display->print(" ");	    	
 	    	display->setCursor(15, 1);display->print(">");	
 	      break;
 	    case MENU_VALUE:
 	    	display->setCursor(0, 0);display->print(" ");
 	    	display->setCursor(15, 0);display->print(" ");
 	    	display->setCursor(0, 1);display->print(" ");
-	    	display->setCursor(10, 1);display->print("<");	    	
+	    	display->setCursor(11, 1);display->print("<");	    	
 	    	display->setCursor(15, 1);display->print(">");
 	      break;
 	}

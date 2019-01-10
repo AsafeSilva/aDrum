@@ -35,19 +35,18 @@
 
 // --- Define maximum value of property
 #define NOTE_MAX		127
-#define ADC_MAX			1023
+#define VELOCITY_MAX	127
 #define SCANTIME_MAX	50
 #define MASKTIME_MAX	500
-#define GAIN_MAX		1000
+#define GAIN_MAX		127
 
 // --- Propertys IDs
-#define TOTAL_PROPERTYS 6
+#define TOTAL_PROPERTYS 5
 #define	NOTE 		0
 #define	THRESHMIN 	1
-#define	THRESHMAX 	2
-#define	SCANTIME 	3
-#define	MASKTIME 	4
-#define	GAIN 		5
+#define	SCANTIME 	2
+#define	MASKTIME 	3
+#define	GAIN 		4
 
 // --- Uncomment if you don't use interface
 #define USING_INTERFACE
