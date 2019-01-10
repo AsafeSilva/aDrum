@@ -2,7 +2,6 @@
 
 #include <Arduino.h>
 #include <LiquidCrystal.h>
-#include <SoftwareSerial.h>
 
 #include "Encoder.h"
 #include "ButtonEvent.h"
@@ -29,10 +28,8 @@ private:
 	ButtonEvent* btnStandby;
 
 	LiquidCrystal* display;
-	// static SoftwareSerial* interface;
-	static Pad* pad;
 
-	// void loadData();
+	static Pad* pad;
 
 	char s_padName[16], s_padProperty[10], s_padValue[5];
 

@@ -2,7 +2,6 @@
 
 #include <Arduino.h>
 #include <EEPROM.h>
-#include <SoftwareSerial.h>
 #include <wiring_private.h>
 
 #include "Pad.h"
@@ -27,16 +26,6 @@ private:
 	// Loads EEPROM data
 	void loadData();
 	
-#endif
-	
-#ifdef USING_INTERFACE
-	// SoftwareSerial* interface;
-
-	// Sends data to interface
-	// void sendData();
-
-	// Receives interface data
-	// void receiveData();
 #endif
 
 

@@ -48,13 +48,6 @@
 #define	MASKTIME 	3
 #define	GAIN 		4
 
-// --- Uncomment if you don't use interface
-#define USING_INTERFACE
-
-// --- Software Serial pins
-// #define RX_PIN	8
-// #define TX_PIN	9
-
 // --- Encoder Pins
 #define ENC_A		3		// ENC_A must be external interrupt pin
 #define ENC_B		2
@@ -80,6 +73,9 @@
 #define	LCD_D6		8
 #define	LCD_D7		9
 #define LCD_LED		16
+
+// --- Uncomment if you don't use interface
+#define USING_INTERFACE
 
 // --- EEPROM
 #define USING_EEPROM
