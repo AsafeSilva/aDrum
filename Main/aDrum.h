@@ -1,8 +1,8 @@
 #pragma once
 
 #include <Arduino.h>
-#include <EEPROM.h>
-#include <wiring_private.h>
+// #include <EEPROM.h>
+// #include <wiring_private.h>
 
 #include "Pad.h"
 #include "DrumInterface.h"

@@ -21,18 +21,13 @@ Pad::Pad(const char* name, int note, int pin, int type){
 	previousTime = 0;
 }
 
-void Pad::begin(){
-#ifdef USING_MUX
-	if(padPin >= MUX0)
-		pinMode(MUX_PIN, INPUT);
-	else
-		pinMode(padPin, INPUT);
-#else
-	pinMode(padPin, INPUT);
-#endif
-}
+void Pad::begin(){/*
 
-void Pad::play(){
+	pinMode(padPin, INPUT);
+
+*/}
+
+void Pad::play(){/*
 
 #ifdef USING_MUX
 	if(padPin >= MUX0){
@@ -101,7 +96,7 @@ void Pad::play(){
     	readPeak = 0;
     	previousTime = currentTime;
 	}
-}
+*/}
 
 // === Getters and Setters === //
 

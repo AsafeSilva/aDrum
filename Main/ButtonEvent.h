@@ -1,4 +1,4 @@
-#pragma once
+/*#pragma once
 
 #include <Arduino.h>
 
@@ -21,4 +21,4 @@ public:
 	void begin(uint8_t _inputMode = INPUT, uint8_t _edgeMode = FALLING);
 
 	void whenClick(void (*callback)(void));
-};
+};*/

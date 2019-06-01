@@ -1,7 +1,7 @@
 #include "Encoder.h"
 #include "Arduino.h"
 
-
+/*
 int Encoder::channelA;
 int Encoder::channelB;
 volatile long Encoder::position;
@@ -83,4 +83,4 @@ void Encoder::whenClick(int pin, void (*callback)(void)){
 
 void Encoder::whenRotate( void (*callback)(boolean, long) ){
 	_whenRotate = callback;
-}
+}*/

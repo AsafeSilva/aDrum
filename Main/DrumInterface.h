@@ -1,4 +1,4 @@
-#pragma once
+/*#pragma once
 
 #include <Arduino.h>
 #include <LiquidCrystal.h>
@@ -74,4 +74,4 @@ public:
 
 };
 
-extern DrumInterface Interface;
+extern DrumInterface Interface;*/

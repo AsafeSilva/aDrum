@@ -1,4 +1,4 @@
-#include "DrumInterface.h"
+/*#include "DrumInterface.h"
 
 volatile int DrumInterface::indexMenu; 
 volatile int DrumInterface::indexPadName;
@@ -344,3 +344,4 @@ void DrumInterface::splashScreen(){
 
 // === Preinstantiate Object === //
 DrumInterface Interface = DrumInterface();
+*/

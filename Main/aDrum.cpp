@@ -73,7 +73,7 @@ Pad* aDrum::get(int id){
 	return NULL;
 }
 
-void aDrum::begin(unsigned long baudRate, bool changePrescalerADC){
+void aDrum::begin(unsigned long baudRate, bool changePrescalerADC){/*
 
 #ifdef USING_MUX
 	MUX_DDR |= MUX_MASK;
@@ -123,14 +123,10 @@ void aDrum::begin(unsigned long baudRate, bool changePrescalerADC){
 	Interface.begin();
 #endif
 
-}
+*/}
 
 void aDrum::play(){
 	readPads();
-
-#ifdef USING_INTERFACE
-	Interface.runInterface();
-#endif
 }
 
 void aDrum::readPads(){
@@ -143,11 +139,11 @@ void aDrum::readPads(){
 
 #ifdef USING_EEPROM
 void aDrum::saveData(int id, int property, int value){
-	EEPROM.put(sizeof(long) * (property + TOTAL_PROPERTYS * id), value);
+	// EEPROM.put(sizeof(long) * (property + TOTAL_PROPERTYS * id), value);
 }
 
 void aDrum::saveAllData(){
-	for(int i = 0; i < MAX_PADS; i++){
+	/*for(int i = 0; i < MAX_PADS; i++){
 		if(pad[i] == NULL)
 			continue;
 
@@ -156,10 +152,10 @@ void aDrum::saveAllData(){
 			saveData(pad[i]->getID(), SCANTIME, pad[i]->getScanTime());
 			saveData(pad[i]->getID(), MASKTIME, pad[i]->getMaskTime());
 			saveData(pad[i]->getID(), GAIN, pad[i]->getGain());
-	}
+	}*/
 }
 
-void aDrum::loadData(){
+void aDrum::loadData(){/*
 	int value;
 
 	for (int id = 0; id < MAX_PADS; id++){
@@ -190,7 +186,7 @@ void aDrum::loadData(){
 		}
 	}
 
-}
+*/}
 #endif
 
 
