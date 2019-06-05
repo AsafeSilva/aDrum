@@ -21,14 +21,13 @@ Pad::Pad(const char* name, int note, int pin, int type){
 	previousTime = 0;
 }
 
-void Pad::begin(){/*
+void Pad::begin(){
+	pinMode(padPin, INPUT_ANALOG);
+}
 
-	pinMode(padPin, INPUT);
+void Pad::play(uint16_t adcData){
 
-*/}
-
-void Pad::play(){/*
-
+/*
 #ifdef USING_MUX
 	if(padPin >= MUX0){
 		MUX_PORT = (MUX_PORT & ~(MUX_MASK)) | ((padPin-MUX0) << MUX_BIT);

@@ -5,6 +5,8 @@ aDrum::aDrum(){
 	cachedSize = 0;
 
 	clear();
+
+	adc = new STM32ADC(ADC1);
 }
 
 
@@ -73,28 +75,19 @@ Pad* aDrum::get(int id){
 	return NULL;
 }
 
-void aDrum::begin(unsigned long baudRate, bool changePrescalerADC){/*
+void aDrum::begin(){
 
-#ifdef USING_MUX
-	MUX_DDR |= MUX_MASK;
-#endif
+	Serial.begin(BAUD_RATE);
 
-	Serial.begin(baudRate);
-
-	if(changePrescalerADC){
-		// set prescale to 8
-		cbi(ADCSRA, ADPS2);
-		sbi(ADCSRA, ADPS1);
-		sbi(ADCSRA, ADPS0);
-		// 8,52us		prescaler 8
-		// 113us		prescaler 128
-	}
+	// Source for negative voltage
+	pinMode(NEGATIVE_VOLTAGE, PWM);
+	pwmWrite(NEGATIVE_VOLTAGE, 32767);
 
 	// Potenciometer to master volume
-	pinMode(MASTER_VOLUME, INPUT);
+	pinMode(MASTER_VOLUME, INPUT_ANALOG);
 
 #ifdef USING_EEPROM
-	pinMode(BTN_STORE, INPUT_PULLUP);
+	// pinMode(BTN_STORE, INPUT_PULLUP);
 #endif
 
 	for(int i = 0; i < MAX_PADS; i++){
@@ -103,27 +96,36 @@ void aDrum::begin(unsigned long baudRate, bool changePrescalerADC){/*
 
 		pad[i]->begin();
 
+		adcPins[pad[i]->getID()] = pad[i]->getPin();
+
 		#ifdef USING_EEPROM
-		if(!digitalRead(BTN_STORE)){
-			saveData(pad[i]->getID(), NOTE, pad[i]->getNote());
-			saveData(pad[i]->getID(), THRESHMIN, pad[i]->getThresholdMin());
-			saveData(pad[i]->getID(), SCANTIME, pad[i]->getScanTime());
-			saveData(pad[i]->getID(), MASKTIME, pad[i]->getMaskTime());
-			saveData(pad[i]->getID(), GAIN, pad[i]->getGain());
-		}
+		// if(!digitalRead(BTN_STORE)){
+		// 	saveData(pad[i]->getID(), NOTE, pad[i]->getNote());
+		// 	saveData(pad[i]->getID(), THRESHMIN, pad[i]->getThresholdMin());
+		// 	saveData(pad[i]->getID(), SCANTIME, pad[i]->getScanTime());
+		// 	saveData(pad[i]->getID(), MASKTIME, pad[i]->getMaskTime());
+		// 	saveData(pad[i]->getID(), GAIN, pad[i]->getGain());
+		// }
 		#endif
 
 	}
 
 #ifdef USING_EEPROM
-	loadData();
+	// loadData();
 #endif
 
-#ifdef USING_INTERFACE
-	Interface.begin();
-#endif
+	// Setup ADC
+	adc->calibrate();
 
-*/}
+	adc->setSampleRate(ADC_SMPR_1_5);
+	adc->setScanMode();
+	adc->setPins(adcPins, cachedSize);
+	adc->setContinuous();
+
+	adc->setDMA(adcData, cachedSize, (DMA_MINC_MODE | DMA_CIRC_MODE), NULL);
+
+	adc->startConversion();
+}
 
 void aDrum::play(){
 	readPads();
@@ -133,7 +135,7 @@ void aDrum::readPads(){
 	for(int i = 0; i < MAX_PADS; i++){
 		if(pad[i] == NULL)	continue;
 		
-		pad[i]->play();
+		pad[i]->play(adcData[pad[i]->getID()]);
 	}
 }
 

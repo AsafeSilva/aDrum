@@ -48,6 +48,11 @@
 #define	MASKTIME 	3
 #define	GAIN 		4
 
+// --------------------------------------------------------------------
+
+// Serial Communication
+#define BAUD_RATE	115200
+
 // --- Encoder Pins
 // #define ENC_A		3		// ENC_A must be external interrupt pin
 // #define ENC_B		2
@@ -62,7 +67,9 @@
 // #define LED_STATUS	14
 // #define LED_SENDING_DATA	15
 
-// #define MASTER_VOLUME	A15
+#define MASTER_VOLUME	PB1
+
+#define NEGATIVE_VOLTAGE PB9
 
 // --- Pins LCD
 // #define LCD_RW	-->	GND
@@ -73,9 +80,6 @@
 // #define	LCD_D6		8
 // #define	LCD_D7		9
 // #define LCD_LED		16
-
-// --- Uncomment if you don't use interface
-// #define USING_INTERFACE
 
 // --- EEPROM
 // #define USING_EEPROM

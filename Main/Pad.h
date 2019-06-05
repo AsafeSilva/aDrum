@@ -35,7 +35,7 @@ public:
 	void begin();
 
 	// Read the pins and send the midi note
-	void play();
+	void play(uint16_t adcData);
 
 	// === Getters and Setters === //
 	void setName(const char* newName);

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Arduino.h>
+#include <STM32ADC.h>
 // #include <EEPROM.h>
 // #include <wiring_private.h>
 
@@ -8,9 +9,7 @@
 #include "DrumInterface.h"
 #include "_config.h"
 
-#define MAX_PADS 16
-
-#define FAST_ADC true
+#define MAX_PADS 9
 
 class aDrum{
 
@@ -28,6 +27,13 @@ private:
 	
 #endif
 
+	// Performs pad reading process
+	void readPads();
+
+	STM32ADC* adc;
+
+	uint16_t adcData[MAX_PADS];
+	uint8_t adcPins[MAX_PADS];
 
 public:
 
@@ -53,15 +59,11 @@ public:
 	Pad* get(int id);
 
 	// Initializes Serial Communication
-	// if changeSpeedADC is 'true', set ADC prescaler to 8
-	void begin(unsigned long baudRate, bool changePrescalerADC = false);
+	void begin();
 
 	// Main function
-	// Chooses between reading pads with or without interface
+	// Call this function to read the pads
 	void play();
-
-	// Performs pad reading process
-	void readPads();
 
 #ifdef USING_EEPROM
 	// Saves all data in the EEPROM
