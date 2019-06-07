@@ -3,7 +3,6 @@
 #include <Arduino.h>
 #include <STM32ADC.h>
 // #include <EEPROM.h>
-// #include <wiring_private.h>
 
 #include "Pad.h"
 #include "DrumInterface.h"

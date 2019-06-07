@@ -1,4 +1,4 @@
-/*#include "DrumInterface.h"
+#include "DrumInterface.h"
 
 volatile int DrumInterface::indexMenu; 
 volatile int DrumInterface::indexPadName;
@@ -35,7 +35,7 @@ void DrumInterface::begin(){
 
 	splashScreen();
 
-	encoder = new Encoder(ENC_A, ENC_B);
+	// encoder = new Encoder(ENC_A, ENC_B);
 
 	btnEnter = new ButtonEvent(BTN_ENTER);
 	btnBack = new ButtonEvent(BTN_BACK);
@@ -43,8 +43,8 @@ void DrumInterface::begin(){
 	btnStandby = new ButtonEvent(BTN_STANDBY);
 
 	// Initialize the Encoder
-	encoder->begin(INPUT, RISING);
-	encoder->whenRotate(this->encoderRotateEvent);
+	// encoder->begin(INPUT, RISING);
+	// encoder->whenRotate(this->encoderRotateEvent);
 
 	// Initialize buttons
 	btnEnter->begin(INPUT_PULLUP, FALLING);
@@ -86,7 +86,6 @@ void DrumInterface::runInterface(){
 	TurnOn(LCD_LED);
 	display->display();
 
-
 	if(storeMenu){
 		strcpy(s_padName, "  SAVE DATA?  ");
 		strcpy(s_padProperty, "");
@@ -97,12 +96,12 @@ void DrumInterface::runInterface(){
 			display->print(F("  SAVING      "));
 
 		#ifdef USING_EEPROM
-			DrumKit.saveAllData();
-			for (int i = 9; i <= 12; i++){
-				delay(500);
-				display->setCursor(i, 0);
-				display->print(F("."));
-			}
+			// DrumKit.saveAllData();
+			// for (int i = 9; i <= 12; i++){
+			// 	delay(500);
+			// 	display->setCursor(i, 0);
+			// 	display->print(F("."));
+			// }
 		#endif
 
 	    	storeMenu = false;
@@ -231,7 +230,7 @@ void DrumInterface::buttonStandbyEvent(){
 
 }
 
-void DrumInterface::encoderRotateEvent(boolean direction, long position){
+void DrumInterface::encoderRotateEvent(boolean direction, long position){/*
 	timeWithoutChanges = millis();
 
 	if(storingData || standby)
@@ -288,7 +287,7 @@ void DrumInterface::encoderRotateEvent(boolean direction, long position){
 	    default:;
 	      // do something
 	}
-}
+*/}
 
 void DrumInterface::print(){
 
@@ -344,4 +343,3 @@ void DrumInterface::splashScreen(){
 
 // === Preinstantiate Object === //
 DrumInterface Interface = DrumInterface();
-*/

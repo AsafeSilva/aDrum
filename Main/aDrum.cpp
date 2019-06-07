@@ -78,6 +78,8 @@ Pad* aDrum::get(int id){
 void aDrum::begin(){
 
 	Serial.begin(BAUD_RATE);
+	
+	afio_cfg_debug_ports(AFIO_DEBUG_NONE);
 
 	// Source for negative voltage
 	pinMode(NEGATIVE_VOLTAGE, PWM);
@@ -139,10 +141,20 @@ void aDrum::begin(){
 #endif
 
 	adc->startConversion();
+
+
+#ifdef USING_INTERFACE
+	Interface.begin();
+#endif	
+
 }
 
 void aDrum::play(){
 	readPads();
+
+#ifdef USING_INTERFACE
+	Interface.runInterface();
+#endif
 }
 
 void aDrum::readPads(){
