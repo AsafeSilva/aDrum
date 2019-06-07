@@ -1,13 +1,10 @@
 #include "Encoder.h"
 #include "Arduino.h"
 
-/*
+
 int Encoder::channelA;
 int Encoder::channelB;
 volatile long Encoder::position;
-
-uint8_t Encoder::bitRegister;
-uint8_t Encoder::portRegister;
 
 boolean Encoder::toLimit;
 int Encoder::limitMin;
@@ -25,13 +22,10 @@ Encoder::Encoder(int _channelA, int _channelB){
 	channelA = _channelA;
 	channelB = _channelB;
 
-	bitRegister = digitalPinToBitMask(channelB);
-	portRegister = digitalPinToPort(channelB);
-
 	toLimit = false;
 }
 
-void Encoder::begin(uint8_t inputMode, uint8_t edgeMode){
+void Encoder::begin(WiringPinMode inputMode, ExtIntTriggerMode edgeMode){
 
 	pinMode(channelA, inputMode);
 	pinMode(channelB, inputMode);
@@ -56,7 +50,7 @@ void Encoder::clear(){
 
 void Encoder::interrupt(){
 
-	bool direction = (*portInputRegister(portRegister) & bitRegister);
+	uint32 direction = gpio_read_bit(PIN_MAP[channelB].gpio_device, PIN_MAP[channelB].gpio_bit);
 
 	position = direction ? position+1 : position-1;
 
@@ -69,18 +63,18 @@ void Encoder::interrupt(){
 		}
 	}
 
-	if(_whenRotate != NULL) _whenRotate(direction, position);
+	if(_whenRotate != NULL) _whenRotate(direction == 1, position);
 }
 
 long Encoder::getPosition(){
 	return position;
 }
 
-void Encoder::whenClick(int pin, void (*callback)(void)){
+void Encoder::whenClick(int pin, voidFuncPtr callback){
 	pinMode(pin, INPUT_PULLUP);
 	attachInterrupt(digitalPinToInterrupt(pin), callback, FALLING);
 }
 
 void Encoder::whenRotate( void (*callback)(boolean, long) ){
 	_whenRotate = callback;
-}*/
+}

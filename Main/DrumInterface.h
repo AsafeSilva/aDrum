@@ -3,7 +3,7 @@
 #include <Arduino.h>
 #include <LiquidCrystal.h>
 
-// #include "Encoder.h"
+#include "Encoder.h"
 #include "ButtonEvent.h"
 #include "_config.h"
 
@@ -21,7 +21,7 @@ class DrumInterface{
 
 private:
 
-	// Encoder* encoder;
+	Encoder* encoder;
 	ButtonEvent* btnEnter;
 	ButtonEvent* btnBack;
 	ButtonEvent* btnStore;

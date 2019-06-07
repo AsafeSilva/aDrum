@@ -55,8 +55,8 @@
 #define BAUD_RATE	115200
 
 // --- Encoder Pins
-#define ENC_A		PB11		// ENC_A must be external interrupt pin
-#define ENC_B		PB10
+#define ENC_A		PB10
+#define ENC_B		PB11
 
 // --- Buttons Pins (must be external interrupt pins)
 #define BTN_BACK	PB15

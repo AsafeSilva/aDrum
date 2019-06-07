@@ -1,10 +1,5 @@
 #pragma once
 
-// Encoder
-// Asafe dos Santos silva
-// 30/11/16
-// 11h03
-
 #include <Arduino.h>
 
 
@@ -12,38 +7,35 @@ class Encoder{
 
 private:
 
-	// static volatile long position;
+	static volatile long position;
 
-	// static int channelA, channelB;
+	static int channelA, channelB;
 
-	// static uint8_t  bitRegister;
-	// static uint8_t  portRegister;
+	static void interrupt();
 
-	// static void interrupt();
+	static boolean toLimit;
+	static int limitMin, limitMax;
 
-	// static boolean toLimit;
-	// static int limitMin, limitMax;
+	static boolean loopMode;
 
-	// static boolean loopMode;
-
-	// static void (*_whenRotate)(boolean, long);
+	static void (*_whenRotate)(boolean, long);
 
 public:
 
-	// static const boolean NOLOOP;
-	// static const boolean LOOP;
+	static const boolean NOLOOP;
+	static const boolean LOOP;
 
-	// Encoder(int _channelA, int _channelB);
+	Encoder(int _channelA, int _channelB);
 
-	// void begin(uint8_t inputMode = INPUT, uint8_t edgeMode = FALLING);
+	void begin(WiringPinMode inputMode = INPUT, ExtIntTriggerMode edgeMode = FALLING);
 
-	// void setLimits(int min, int max, boolean _loopMode = false);
+	void setLimits(int min, int max, boolean _loopMode = false);
 
-	// void clear();
+	void clear();
 
-	// long getPosition();
+	long getPosition();
 
-	// void whenClick(int pin, void (*callback)(void));
+	void whenClick(int pin, voidFuncPtr callback);
 
-	// void whenRotate( void (*callback)(boolean, long) );
+	void whenRotate( void (*callback)(boolean, long) );
 };
