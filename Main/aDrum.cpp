@@ -83,8 +83,10 @@ void aDrum::begin(){
 	pinMode(NEGATIVE_VOLTAGE, PWM);
 	pwmWrite(NEGATIVE_VOLTAGE, 32767);
 
+#ifdef USING_MASTER_VOLUME
 	// Potenciometer to master volume
 	pinMode(MASTER_VOLUME, INPUT_ANALOG);
+#endif
 
 #ifdef USING_EEPROM
 	// pinMode(BTN_STORE, INPUT_PULLUP);
@@ -107,8 +109,12 @@ void aDrum::begin(){
 		// 	saveData(pad[i]->getID(), GAIN, pad[i]->getGain());
 		// }
 		#endif
-
 	}
+
+#ifdef USING_MASTER_VOLUME
+	// Add master volume pin to the array
+	adcPins[cachedSize] = MASTER_VOLUME;
+#endif
 
 #ifdef USING_EEPROM
 	// loadData();
@@ -119,10 +125,18 @@ void aDrum::begin(){
 
 	adc->setSampleRate(ADC_SMPR_1_5);
 	adc->setScanMode();
+#ifdef USING_MASTER_VOLUME	
+	adc->setPins(adcPins, cachedSize+1);
+#else
 	adc->setPins(adcPins, cachedSize);
+#endif
 	adc->setContinuous();
 
+#ifdef USING_MASTER_VOLUME	
+	adc->setDMA(adcData, cachedSize+1, (DMA_MINC_MODE | DMA_CIRC_MODE), NULL);
+#else
 	adc->setDMA(adcData, cachedSize, (DMA_MINC_MODE | DMA_CIRC_MODE), NULL);
+#endif
 
 	adc->startConversion();
 }
@@ -134,8 +148,12 @@ void aDrum::play(){
 void aDrum::readPads(){
 	for(int i = 0; i < MAX_PADS; i++){
 		if(pad[i] == NULL)	continue;
-		
-		pad[i]->play(adcData[pad[i]->getID()]);
+
+#ifdef USING_MASTER_VOLUME
+		pad[i]->play(adcData[pad[i]->getID()], adcData[cachedSize]);
+#else
+		pad[i]->play(adcData[pad[i]->getID()], ADC_MAX);
+#endif		
 	}
 }
 

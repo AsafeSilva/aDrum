@@ -6,10 +6,9 @@ Pad::Pad(const char* name, int note, int pin, int type){
 	setNote(note);
 	setPin(pin);
 	setType(type);
-	setThresholdMin(40);
-	setThresholdMax(800);
+	setThresholdMin(18);
 	setScanTime(30);
-	setMaskTime(55);
+	setMaskTime(60);
 	setGain(0);
 
 	readSensor = 0;
@@ -17,31 +16,18 @@ Pad::Pad(const char* name, int note, int pin, int type){
 	readPeak = 0;
 	readEnable = true;
 	velocity = 0;
-	currentTime = 0;
-	previousTime = 0;
+	maskPreviousTime = millis();
+	scanPreviousTime = millis();
 }
 
 void Pad::begin(){
 	pinMode(padPin, INPUT_ANALOG);
 }
 
-void Pad::play(uint16_t adcData){
+void Pad::play(uint16_t adcData, uint16_t masterVolume){
 
-/*
-#ifdef USING_MUX
-	if(padPin >= MUX0){
-		MUX_PORT = (MUX_PORT & ~(MUX_MASK)) | ((padPin-MUX0) << MUX_BIT);
-		delayMicroseconds(5);
-		readSensor = analogRead(MUX_PIN);
-	}else{
-		readSensor = analogRead(padPin);
-	}
-#else
-	readSensor = analogRead(padPin);
-#endif
-
-	// Maps values ​​from 0 to 127
-	readSensor = (int) (readSensor * 127.0 / 1023.0);
+	// Maps values ​​for the range 0 to 127
+	readSensor = (int) (adcData * float(VELOCITY_MAX) / float(ADC_MAX));
 
 
 	if((padType == OFF) || (readSensor < padThresholdMin))
@@ -58,44 +44,42 @@ void Pad::play(uint16_t adcData){
 		return;
 	}
 
-	if(currentTime - previousTime <= padMaskTime){
+	if(padType != PIEZO)
+		return;
 
-		currentTime = millis();
 
-		if(readNumber < padScanTime){
+	if(millis() - maskPreviousTime <= padMaskTime){
+
+		if(millis() - scanPreviousTime <= padScanTime){
 
 			if(readSensor > readPeak)
 				readPeak = readSensor;
 
-			readNumber++;
-
 		}else if(readEnable){
 
-			TurnOn(LED_SENDING_DATA);
+			// TurnOn(LED_SENDING_DATA);
 
 			readEnable = false;
 
 			// calculate value between 0 and 1
-			float masterVolume = analogRead(MASTER_VOLUME);
-			masterVolume /= 1023.0;
+			float master = masterVolume / float(ADC_MAX);
 
 			velocity = constrain(readPeak + padGain, 0, VELOCITY_MAX);
-			velocity = (int)(velocity * masterVolume);
+			velocity = (int)(velocity * master);
 
 			// Send Midi Note
 			Serial.write(padType | MIDI_CHANNEL);
 			Serial.write(padNote);
 			Serial.write(velocity);
 
-			TurnOff(LED_SENDING_DATA);
+			// TurnOff(LED_SENDING_DATA);
 		}
 	} else {
     	readEnable = true;
-    	readNumber = 0;
     	readPeak = 0;
-    	previousTime = currentTime;
+    	maskPreviousTime = scanPreviousTime = millis();
 	}
-*/}
+}
 
 // === Getters and Setters === //
 
@@ -120,11 +104,11 @@ int Pad::getThresholdMin(){	return padThresholdMin;	}
 void Pad::setThresholdMax(int newThresholdMax){	padThresholdMax = constrain(newThresholdMax, 0, VELOCITY_MAX);	}
 int Pad::getThresholdMax(){	return padThresholdMax;	}
 
-void Pad::setScanTime(int newScanTime){	padScanTime = constrain(newScanTime, 0, SCANTIME_MAX);	}
-int Pad::getScanTime(){	return padScanTime;	}
+void Pad::setScanTime(uint32 newScanTime){	padScanTime = constrain(newScanTime, 0, SCANTIME_MAX);	}
+uint32 Pad::getScanTime(){	return padScanTime;	}
 
-void Pad::setMaskTime(int newMaskTime){	padMaskTime = constrain(newMaskTime, 0, MASKTIME_MAX);	}
-int Pad::getMaskTime(){	return padMaskTime;	}
+void Pad::setMaskTime(uint32 newMaskTime){	padMaskTime = constrain(newMaskTime, 0, MASKTIME_MAX);	}
+uint32 Pad::getMaskTime(){	return padMaskTime;	}
 
 void Pad::setGain(int newGain){	padGain = constrain(newGain, 0, GAIN_MAX);	}
 int Pad::getGain(){	return padGain;	}

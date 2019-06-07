@@ -36,9 +36,10 @@
 // --- Define maximum value of property
 #define NOTE_MAX		127
 #define VELOCITY_MAX	127
-#define SCANTIME_MAX	50
-#define MASKTIME_MAX	500
+#define SCANTIME_MAX	200
+#define MASKTIME_MAX	200
 #define GAIN_MAX		127
+#define ADC_MAX			4095
 
 // --- Propertys IDs
 #define TOTAL_PROPERTYS 5
@@ -67,6 +68,8 @@
 // #define LED_STATUS	14
 // #define LED_SENDING_DATA	15
 
+// --- Master Volume
+#define USING_MASTER_VOLUME
 #define MASTER_VOLUME	PB1
 
 #define NEGATIVE_VOLTAGE PB9
@@ -85,6 +88,6 @@
 // #define USING_EEPROM
 
 // --- MACROS
-// #define TurnOn(pin)	digitalWrite(pin, 1)
-// #define TurnOff(pin)	digitalWrite(pin, 0)
-// #define Toggle(pin)	digitalWrite(pin, !digitalRead(pin))
+#define TurnOn(pin) 	digitalWrite(pin, 1)
+#define TurnOff(pin) 	digitalWrite(pin, 0)
+// #define Toggle(pin) 	digitalWrite(pin, !digitalRead(pin))

@@ -32,8 +32,13 @@ private:
 
 	STM32ADC* adc;
 
+#ifdef USING_MASTER_VOLUME
+	uint16_t adcData[MAX_PADS+1];
+	uint8_t adcPins[MAX_PADS+1];
+#else
 	uint16_t adcData[MAX_PADS];
 	uint8_t adcPins[MAX_PADS];
+#endif
 
 public:
 

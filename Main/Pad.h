@@ -14,8 +14,8 @@ private:
 	int padPin;
 	int padThresholdMin;
 	int padThresholdMax;
-	int padScanTime;
-	int padMaskTime;
+	uint32 padScanTime;
+	uint32 padMaskTime;
 	int padGain;
 
 	int readSensor;
@@ -23,8 +23,8 @@ private:
 	int readPeak;
 	bool readEnable;
 	int velocity;
-	unsigned long currentTime;
-	unsigned long previousTime;
+	uint32 maskPreviousTime;
+	uint32 scanPreviousTime;
 	
 public:
 	
@@ -35,7 +35,7 @@ public:
 	void begin();
 
 	// Read the pins and send the midi note
-	void play(uint16_t adcData);
+	void play(uint16_t adcData, uint16_t masterVolume);
 
 	// === Getters and Setters === //
 	void setName(const char* newName);
@@ -59,11 +59,11 @@ public:
 	void setThresholdMax(int newThresholdMax);
 	int getThresholdMax();
 
-	void setScanTime(int newScanTime);
-	int getScanTime();
+	void setScanTime(uint32 newScanTime);
+	uint32 getScanTime();
 
-	void setMaskTime(int newMaskTime);
-	int getMaskTime();
+	void setMaskTime(uint32 newMaskTime);
+	uint32 getMaskTime();
 
 	void setGain(int newGain);
 	int getGain();

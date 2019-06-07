@@ -7,7 +7,6 @@ Pad kick("KICK", KICK, PA3);
 Pad crash1("CRASH 1", CYMBAL1, PA4);
 Pad crash2("CRASH 2", CYMBAL2, PA5);
 Pad ride("RIDE", RIDE_TIPE, PA6);
-
 Pad hihat("HIHAT", HIHAT_SHAFT, PA7);
 Pad hhc("HH-CONTROL", HH_CONTROLLER, PB0, HH_C);
 
@@ -21,13 +20,15 @@ void setup() {
 	DrumKit.addPad(&crash1);
 	DrumKit.addPad(&crash2);
 	DrumKit.addPad(&ride);
-
 	DrumKit.addPad(&hihat);
 	DrumKit.addPad(&hhc);
 
 	DrumKit.begin();
+
+	while(true){
+		DrumKit.play();		
+	}
 }
 
 void loop() {
-	DrumKit.play();
 }
